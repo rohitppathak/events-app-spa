@@ -20,8 +20,17 @@ defmodule EventsApp.Users.User do
       [:name, :email, :password_hash]
     end
     user
-    |> cast(attrs, [:name, :email, :password_hash])
+    |> cast(attrs, [:name, :email])
+    |> add_password_hash(attrs["password"])
     |> validate_required(required)
     |> unique_constraint(:email, name: :email_unique)
+  end
+
+  def add_password_hash(cset, nil) do
+    cset
+  end
+
+  def add_password_hash(cset, password) do
+    change(cset, Argon2.add_hash(password))
   end
 end
