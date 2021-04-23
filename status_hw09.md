@@ -13,7 +13,7 @@ https://github.com/rohitppathak/events-app-spa.git
 
 
 3. What's the URL that you deployed to?
-www.events-spa.rohitpathak.us
+events-spa.rohitpathak.us
 
 
 4. Is your app functionality complete? If not, what's missing?

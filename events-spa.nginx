@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name events-spa.rohitpathak.us;
+
+    root /home/events/www;
+
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location /api {
+        proxy_pass http://localhost:4793;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    location /socket {
+        proxy_pass http://localhost:4793;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+}
