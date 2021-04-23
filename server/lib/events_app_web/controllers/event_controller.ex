@@ -13,6 +13,7 @@ defmodule EventsAppWeb.EventController do
 
   def create(conn, %{"event" => event_params}) do
     with {:ok, %Event{} = event} <- Events.create_event(event_params) do
+      event = event |> Events.event_info
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.event_path(conn, :show, event))
@@ -26,7 +27,7 @@ defmodule EventsAppWeb.EventController do
   end
 
   def update(conn, %{"id" => id, "event" => event_params}) do
-    event = Events.get_event!(id)
+    event = Events.get_event!(id) |> Events.event_info
 
     with {:ok, %Event{} = event} <- Events.update_event(event, event_params) do
       render(conn, "show.json", event: event)

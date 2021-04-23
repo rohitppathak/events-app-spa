@@ -46,17 +46,18 @@ function user_session(state = get_current_session(), action) {
     }
 }
 
-function logged_in_user(state= null, action) {
+function logged_in_user(state = null, action) {
     switch (action.type) {
         case 'logged_in_user/set':
             return action.data;
+        case 'logged_in_user/clear':
+            return null;
         default:
             return state;
     }
 }
 
 function root_reducer(state, action) {
-    console.log("root_reducer", state, action);
     let reducer = combineReducers({
         users, user_form, user_session, logged_in_user, error
     });

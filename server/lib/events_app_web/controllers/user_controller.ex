@@ -37,10 +37,8 @@ defmodule EventsAppWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    IO.inspect("here")
     user = Users.get_user!(id)
     |> Users.load_user_info
-    IO.inspect(user)
     render(conn, "show.json", user: user)
   end
 
@@ -48,6 +46,7 @@ defmodule EventsAppWeb.UserController do
     user = Users.get_user!(id)
 
     with {:ok, %User{} = user} <- Users.update_user(user, user_params) do
+      user = user |> Users.load_user_info
       render(conn, "show.json", user: user)
     end
   end

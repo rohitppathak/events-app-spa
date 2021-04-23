@@ -1,14 +1,15 @@
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { useState } from 'react'
+import {useState} from 'react'
 import { useHistory } from 'react-router-dom';
 import pick from 'lodash/pick';
 
-import { new_user, fetch_users } from './api';
+import {new_user, fetch_users, update_user, login} from './api';
 
-function UsersNew() {
+function UsersNew({logged_in_user}) {
+
     let history = useHistory();
-    const [user, setUser] = useState({name: "", pass1: "", pass2: ""});
+    const [user, setUser] = useState({email: logged_in_user?.email || "", name: logged_in_user?.name || "", pass1: "", pass2: ""});
 
     function check_pass(p1, p2) {
         if (p1 !== p2) {
@@ -32,12 +33,14 @@ function UsersNew() {
 
     function onSubmit(ev) {
         ev.preventDefault();
-        console.log(user);
 
         let data = pick(user, ['email', 'name', 'password']);
-        new_user(data).then(() => {
+        (logged_in_user ? update_user(user, logged_in_user.id) : new_user(data)).then(async () => {
+            if (!logged_in_user) {
+                await login(user.email, user.pass1);
+            }
             fetch_users();
-            history.push("/users");
+            history.push("/");
         });
     }
 
@@ -82,8 +85,8 @@ function UsersNew() {
     );
 }
 
-function state2props() {
-    return {};
+function state2props({logged_in_user}) {
+    return {logged_in_user};
 }
 
 export default connect(state2props)(UsersNew);

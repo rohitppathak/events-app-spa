@@ -24,7 +24,6 @@ defmodule EventsAppWeb.EventView do
   end
 
   def render("event_invite.json", %{event: %Invite{event: event}}) do
-    IO.inspect(event)
     render("event.json", %{event: event})
   end
 

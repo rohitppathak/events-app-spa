@@ -19,7 +19,6 @@ defmodule Inject do
 
   def user(name, pass, email) do
     hash = Argon2.hash_pwd_salt(pass)
-    IO.inspect(hash)
     Repo.insert!(%User{name: name, password_hash: hash, email: email})
   end
 end

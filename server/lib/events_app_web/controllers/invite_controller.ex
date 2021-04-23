@@ -39,7 +39,6 @@ defmodule EventsAppWeb.InviteController do
 
   def update(conn, %{"id" => id, "invite_params" => invite_params}) do
     invite = Invites.get_invite!(id)
-    IO.inspect(invite_params)
 
     with {:ok, %Invite{} = invite} <- Invites.update_invite(invite, invite_params) do
       render(conn, "show.json", invite: invite)

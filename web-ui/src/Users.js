@@ -1,52 +1,15 @@
 import { connect } from 'react-redux';
-import { Row, Col, Form, Button } from 'react-bootstrap';
-import capitalize from 'lodash/capitalize';
+import { Row, Col } from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
-function Field({user, setUser, field}) {
-    function update(ev) {
-        let tmp = Object.assign({}, user);
-        tmp[field] = ev.target.value;
-        setUser(tmp);
-    }
-
-    return (
-        <Form.Group>
-            <Form.Label>{capitalize(field)}</Form.Label>
-            <Form.Control type="text" onChange={update} value={user[field]||""} />
-        </Form.Group>
-    );
-}
-
-function UserForm({user, setUser}) {
-    function onSubmit(ev) {
-        ev.preventDefault();
-        console.log(ev);
-        console.log(user);
-    }
-
-    return (
-        <Form onSubmit={onSubmit}>
-            <Field user={user} setUser={setUser} field="name" />
-            <Button variant="primary" type="submit">
-                Save
-            </Button>
-        </Form>
-    );
-}
-
-function Users({users, user_form, dispatch}) {
-
-    function setUser(user) {
-        dispatch({type: 'user_form/set', data: user});
-    }
+function Users({users, logged_in_user}) {
 
     let rows = users.map((user) => (
         <tr key={user.id}>
             <td>{user.name}</td>
             <td>{user.email}</td>
             <td>
-                <Link to={"/users/" + user.id}>Edit</Link>
+                {logged_in_user.id === user.id && <Link to={`/users/${user.id}/edit`}>Edit</Link>}
             </td>
         </tr>
     ));
@@ -56,12 +19,6 @@ function Users({users, user_form, dispatch}) {
             <Row>
                 <Col>
                     <h2>List Users</h2>
-                    <p>
-                        <Button variant="secondary"
-                                onClick={() => setUser({})}>
-                            New User
-                        </Button>
-                    </p>
                     <table className="table table-striped">
                         <thead>
                             <tr>
@@ -76,14 +33,8 @@ function Users({users, user_form, dispatch}) {
                     </table>
                 </Col>
             </Row>
-            <Row>
-                <Col>
-                    <h2>Edit User</h2>
-                    <UserForm user={user_form} setUser={setUser} />
-                </Col>
-            </Row>
         </div>
     );
 }
 
-export default connect(({users, user_form}) => ({users, user_form}))(Users);
+export default connect(({users, logged_in_user}) => ({users, logged_in_user}))(Users);

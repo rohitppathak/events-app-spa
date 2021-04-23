@@ -29,8 +29,6 @@ function Event({user_session}) {
 
     const current_user_id = user_session && user_session.user_id;
     const owner = current_user_id === event.owner.id;
-    console.log(event.invites);
-    console.log(current_user_id);
     const matchingInvites = event.invites.filter(invite => invite.user.id === current_user_id);
     const currentInvite = matchingInvites.length && matchingInvites[0];
     const invitee = current_user_id && event.invites.reduce((ans, invite) => ans || invite.user.email === user_session.email, false)
@@ -65,14 +63,13 @@ function Event({user_session}) {
 
     const updateInvite = async event => {
         event.preventDefault();
-        console.log(currentInvite, status, comment);
         const result = await update_invite(currentInvite.id, status, comment);
         update();
     };
 
     event.invites.forEach(invite => invite_info[invite.status]++);
     return (<Container>
-            {owner ? <Link to={`/events/${id}/edit`}>Edit</Link> : null}
+            {owner ? <Link style={{margin: 10}} to={`/events/${id}/edit`}>Edit</Link> : null}
             <Link to={`/`}>Back</Link>
             <h1>{event.title}</h1>
             <div className={"row"}>

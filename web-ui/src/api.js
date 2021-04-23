@@ -49,6 +49,45 @@ export async function new_user(user) {
     return result;
 }
 
+export async function update_user(user, user_id) {
+    const options = {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: user_id, user})
+    };
+    const text = await fetch(SERVER + `/users/${user_id}`, options);
+    const result = await text.json();
+    return result;
+}
+
+export async function new_event(event) {
+    const options = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({event})
+    };
+    const text = await fetch(SERVER + "/events", options);
+    const result = await text.json();
+    return result;
+}
+
+export async function update_event(event, event_id) {
+    const options = {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: event_id, event})
+    };
+    const text = await fetch(SERVER + `/events/${event_id}`, options);
+    const result = await text.json();
+    return result;
+}
+
 export async function update_invite(inviteId, status, comment) {
     const token = store.getState().session && store.getState().session.token;
     const options = {
@@ -80,12 +119,7 @@ export async function login(email, password) {
             data: session
         };
         store.dispatch(action);
-        const current_user_data = await api_get("/users/" + session.user_id);
-        console.log(current_user_data);
-        store.dispatch({
-            type: 'logged_in_user/set',
-            data: current_user_data,
-        });
+        await fetch_user(session.user_id);
     } else if (session.error) {
         let action = {
             type: 'error/set',
@@ -93,6 +127,14 @@ export async function login(email, password) {
         };
         store.dispatch(action);
     }
+}
+
+export async function fetch_user(user_id) {
+    const current_user_data = await api_get("/users/" + user_id);
+    store.dispatch({
+        type: 'logged_in_user/set',
+        data: current_user_data,
+    });
 }
 
 

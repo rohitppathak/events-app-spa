@@ -1,5 +1,5 @@
 import {Button, Container, Form, Nav, Alert} from 'react-bootstrap';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useHistory} from 'react-router-dom';
 import React, {useState} from "react";
 import store from './store';
 import {login} from "./api";
@@ -45,9 +45,12 @@ function Login() {
 }
 
 function LoggedIn({user_session}) {
+    const history = useHistory();
     const logout = event => {
         event.preventDefault();
         store.dispatch({ type: 'user_session/clear' });
+        store.dispatch({ type: 'logged_in_user/clear' });
+        history.push("/");
     };
 
     return (
