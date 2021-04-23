@@ -1,6 +1,6 @@
 import store from './store';
 
-const SERVER = "http://localhost:4000/api/v1";
+const SERVER = "http://events-spa.rohitpathak.us/api/v1";
 
 export async function api_get(path) {
     let text = await fetch(SERVER + path, {});
